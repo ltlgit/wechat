@@ -26,11 +26,12 @@ public class WechatPubController {
     @RequestMapping("/access")
     public String access(HttpServletRequest request, HttpServletResponse response){
         log.info("公众号信息接送start");
+        String msg = null;
         try {
-            wechatPubService.access(request,response);
+            msg = wechatPubService.access(request,response);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "ok";
+        return msg;
     }
 }

@@ -17,9 +17,21 @@ public class WechatPubService {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
+        String signature = request.getParameter("signature");
+        String timestamp = request.getParameter("timestamp");
+        String nonce = request.getParameter("nonce");
+        String echostr = request.getParameter("echostr");
+        if(WechatPubUtils.checkSign(signature,timestamp,nonce)){
+            respMsg = echostr;
+        }
+
         Map<String, String> map = WechatPubUtils.parseXml(request);
-        String fromUserName = map.get("FromUserName");
+        String encrypt = map.get("Encrypt");
         String toUserName = map.get("ToUserName");
+
+
+        String decrypt = WechatPubUtils.decrypt(signature, timestamp, nonce, encrypt);
+
         String msgType = map.get("MsgType");
 
         if(WechatPubUtils.REQ_TEXT.endsWith(msgType)){
@@ -29,6 +41,6 @@ public class WechatPubService {
             log.info("图片消息");
             respMsg = "图片消息";
         }
-        return "ok";
+        return respMsg;
     }
 }
