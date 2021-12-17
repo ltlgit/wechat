@@ -110,14 +110,14 @@ public class WechatPubUtils {
         return "";
     }
 
-    public static Map<String, String> decrypt(String msgSignature,String timestamp,String nonce,String encrypt,String toUserName) throws Exception{
+    public static Map<String, String> decrypt(String msgSignature,String timestamp,String nonce,String fromXML) throws Exception{
         String token = "ltlce";
         String encodingAesKey = "8iLKKH6zk1XeZsKxdGOvNjhYsydtFH0ySO1iS0ZleRe";
         String appId = "wx994fe56baeeb0361";
         WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
 
-        String format = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><Encrypt><![CDATA[%1$s]]></Encrypt></xml>";
-        String fromXML = String.format(format,encrypt);
+        /*String format = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><Encrypt><![CDATA[%1$s]]></Encrypt></xml>";
+        String fromXML = String.format(format,encrypt);*/
 
         String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, fromXML);
         log.info("解密后明文: " + result2);

@@ -33,9 +33,9 @@ public class WechatPubService {
             return echostr;
         }
 
-        Map<String, String> map = WechatPubUtils.parseXml(request);
+        /*Map<String, String> map = WechatPubUtils.parseXml(request);
         String encrypt = map.get("Encrypt");
-        String toUserName = map.get("ToUserName");
+        String toUserName = map.get("ToUserName");*/
 
         ServletInputStream in = request.getInputStream();
         InputStreamReader inputStreamReader = new InputStreamReader(in,"UTF-8");
@@ -49,11 +49,11 @@ public class WechatPubService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Map<String, String> decryptMap = WechatPubUtils.decrypt(signature, timestamp, nonce, encrypt,toUserName);
+        Map<String, String> decryptMap = WechatPubUtils.decrypt(signature, timestamp, nonce,sb.toString());
 
         String msgType = decryptMap.get("MsgType");
         String fromUserName = decryptMap.get("FromUserName");
-
+        String toUserName = decryptMap.get("toUserName");
         if(WechatPubUtils.REQ_TEXT.endsWith(msgType)){
             log.info("文本消息");
             respMsg = "文本消息";
