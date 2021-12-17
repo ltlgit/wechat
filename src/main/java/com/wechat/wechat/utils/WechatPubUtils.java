@@ -2,6 +2,7 @@ package com.wechat.wechat.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.Component;
@@ -109,14 +110,27 @@ public class WechatPubUtils {
         return "";
     }
 
-    public static String decrypt(String msgSignature,String timestamp,String nonce,String fromXML) throws Exception{
+    public static Map<String, String> decrypt(String msgSignature,String timestamp,String nonce,String encrypt,String toUserName) throws Exception{
         String token = "ltlce";
         String encodingAesKey = "8iLKKH6zk1XeZsKxdGOvNjhYsydtFH0ySO1iS0ZleRe";
         String appId = "wx994fe56baeeb0361";
         WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
+
+        String format = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><Encrypt><![CDATA[%1$s]]></Encrypt></xml>";
+        String fromXML = String.format(format,encrypt);
+
         String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, fromXML);
         log.info("解密后明文: " + result2);
-        return result2;
+
+        //将解密后的消息转为xml
+        Map<String, String> map = new HashMap<>();
+        Document doc = DocumentHelper.parseText(result2);
+        Element root = doc.getRootElement();
+        List<Element> list = root.elements();
+        for (Element e : list) {
+            map.put(e.getName(), e.getText());
+        }
+        return map;
 /*//    demo
         // 第三方回复公众平台
         //
