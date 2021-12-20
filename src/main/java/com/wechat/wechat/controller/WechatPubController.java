@@ -1,5 +1,6 @@
 package com.wechat.wechat.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.wechat.wechat.service.WechatPubService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class WechatPubController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        log.info("公众号信息接送end:{}", JSON.toJSONString(msg));
         return msg;
     }
 }

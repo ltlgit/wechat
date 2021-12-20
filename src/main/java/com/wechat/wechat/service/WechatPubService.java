@@ -69,6 +69,8 @@ public class WechatPubService {
         resultXml += "<MsgType><![CDATA["+msgType+"]]></MsgType>";
         resultXml += "<Content><![CDATA["+respMsg+"]]></Content>";
         resultXml += "</xml>";
+
+        resultXml =WechatPubUtils.encryptMsg(resultXml, timestamp, nonce);
         return resultXml;
     }
 }

@@ -48,6 +48,10 @@ public class WechatPubUtils {
     public final static String RESP_VIEW = "VIEW";
     public final static String RESP_TEMPLATESENDJOBFINISH = "TEMPLATESENDJOBFINISH";
 
+    public final static String token = "ltlce";
+    public final static String encodingAesKey = "8iLKKH6zk1XeZsKxdGOvNjhYsydtFH0ySO1iS0ZleRe";
+    public final static String appId = "wx994fe56baeeb0361";
+
     public static Map<String,String> parseXml(HttpServletRequest request) throws Exception{
         Map<String,String> map = new HashMap<>();
         InputStream inputStream = request.getInputStream();
@@ -68,7 +72,6 @@ public class WechatPubUtils {
     }
 
     public static boolean checkSign(String signature,String timestamp,String nonce){
-        String token = "ltlce";
         String[] strArray = { token, timestamp, nonce };
         Arrays.sort(strArray);
         StringBuilder sbuilder = new StringBuilder();
@@ -110,10 +113,13 @@ public class WechatPubUtils {
         return "";
     }
 
+    /**
+     * 消息解密
+     * */
     public static Map<String, String> decrypt(String msgSignature,String timestamp,String nonce,String fromXML) throws Exception{
-        String token = "ltlce";
+        /*String token = "ltlce";
         String encodingAesKey = "8iLKKH6zk1XeZsKxdGOvNjhYsydtFH0ySO1iS0ZleRe";
-        String appId = "wx994fe56baeeb0361";
+        String appId = "wx994fe56baeeb0361";*/
         WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
 
         /*String format = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><Encrypt><![CDATA[%1$s]]></Encrypt></xml>";
@@ -173,5 +179,14 @@ public class WechatPubUtils {
 
         //pc.verifyUrl(null, null, null, null);*/
 
+    }
+
+    /**
+     * 消息加密
+     * */
+    public static String encryptMsg(String replyMsg,String timestamp,String nonce) throws Exception{
+        WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
+        String mingwen = pc.encryptMsg(replyMsg, timestamp, nonce);
+        return mingwen;
     }
 }
